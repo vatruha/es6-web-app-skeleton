@@ -1,0 +1,42 @@
+{
+  "name": "es6-web-app-skeleton",
+  "description": "The skeleton of a web application with native ES6 custom elements, ES6 modules, ES6 features and unit tests",
+	"version": "0.0.1",
+	"author": "Dima Popovichenko (Vatruha)",
+	"license": "Apache-2.0",
+  "scripts": {
+		"test": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vatruha/es6-web-app-skeleton.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vatruha/es6-web-app-skeleton/issues"
+  },
+  "homepage": "https://github.com/vatruha/es6-web-app-skeleton#readme",
+	"dependencies": {
+		"handlebars": "^4.0.11"
+	},
+	"devDependencies": {
+		"chai": "^4.1.2",
+		"del": "^3.0.0",
+		"gulp": "^3.9.1",
+		"gulp-concat": "^2.6.1",
+		"gulp-define-module": "^0.1.5",
+		"gulp-inject": "^4.3.0",
+		"gulp-livereload": "^3.8.1",
+		"gulp-newer": "^1.3.0",
+		"gulp-precompile-handlebars": "^2.0.7",
+		"gulp-rename": "^1.2.2",
+		"gulp-sourcemaps": "^2.6.1",
+		"karma": "^1.7.1",
+		"karma-chai": "^0.1.0",
+		"karma-chrome-launcher": "^2.2.0",
+		"karma-mocha": "^1.3.0",
+		"karma-mocha-reporter": "^2.2.5",
+		"karma-sinon": "^1.0.5",
+		"mocha": "^3.5.3",
+		"sinon": "^4.0.1"
+	}
+}
