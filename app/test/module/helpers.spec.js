@@ -1,6 +1,6 @@
 import helpers from "/module/helpers/helpers.js"
 
-describe.only('Helpers', () => {
+describe('Helpers', () => {
 	describe('timeout()', () => {
 		it("should return Promise when execute timeout", function () {
 			let result = helpers.timeout(1)
