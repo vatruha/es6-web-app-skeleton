@@ -5,7 +5,7 @@ class TestComponent extends HTMLElement {
 	constructor() {
 		super()
 
-		let shadowRoot = this.attachShadow({mode: 'open'});
+		let shadowRoot = this.attachShadow({mode: 'open'})
 		shadowRoot.innerHTML = template()
 		this._button = this.shadowRoot.querySelector('button')
 	}

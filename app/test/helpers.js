@@ -14,5 +14,5 @@ export function importModule(url) {
 		}
 
 		document.body.appendChild(script)
-	});
+	})
 }

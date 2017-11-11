@@ -34,7 +34,7 @@ class DataProvider {
 
 	async load(url, params) {
 		try {
-			let counter = this.timeToWaitInMilliseconds / 50;
+			let counter = this.timeToWaitInMilliseconds / 50
 			while (this.urls.size === 0 && counter > 0) {
 				await helpers.timeout(50)
 				counter--
