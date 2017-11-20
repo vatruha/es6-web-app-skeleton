@@ -13,23 +13,38 @@ Features:
 Execute `git clone https://github.com/vatruha/es6-web-app-skeleton.git` to clone this project.
 ### Directory structure
 ```
-app/                 location of js application
-├── bootstrap/       boostrap files for the app and tests
-├── component/       components are located there
-├── css/             not related to components css files are located there
-├── examples/        examples of components/modules usage
-├── img/             not related to components images
-├── module/          modules are located there
-├── test/            modules/components/ets tests are located there
-├── index.html       
-└── test.html        this file is used in mocha for tests
-web/                 public folder
+.
+├── app/                 location of js application
+│   ├── bootstrap/       boostrap files for the app and tests
+│   ├── component/       components
+│   ├── css/             not related to components css files
+│   ├── examples/        examples of components/modules usage
+│   ├── img/             not related to components images
+│   ├── module/          modules
+│   ├── test/            modules/components/ets tests are located there
+│   ├── index.html       
+│   └── test.html        this file is used in mocha for tests
+├── web/                 public folder with copied/parsed/combined/etc files
+│   ├── component/       
+│   ├── css/             
+│   ├── examples/        
+│   ├── img/             
+│   ├── js/              bootstrap and vendors files
+│   ├── module/          
+│   ├── test/            
+│   ├── index.html
+│   └── test.html
+├── gulpfile.js
+├── karma.conf.js  
+├── LICENSE
+├── package.json
+└── README.md
 ```
 
 ## Usage
 
-* Execute `gulp clean && gulp watch` in command line to run gulp 
-* Execute `npm run test` for run tests
+* Execute `gulp clean && gulp watch` to run gulp 
+* Execute `npm run test` to run tests
 
 ## License
 
