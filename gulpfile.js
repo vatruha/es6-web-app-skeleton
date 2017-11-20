@@ -65,7 +65,7 @@ gulp.task('clean', function () {
 	])
 });
 
-gulp.task('copy', ['copy:html', 'copy:examples', 'copy:css', 'copy:img', 'copy:bootstraps', 'copy:modules', 'copy:components', 'copy:vendors', 'copy:tests']);
+gulp.task('copy', ['copy:html', 'copy:css', 'copy:img', 'copy:bootstraps', 'copy:modules', 'copy:components', 'copy:vendors', 'copy:tests']);
 
 gulp.task('compile-component-templates', function() {
 	return gulp.src(paths.template)
