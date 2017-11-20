@@ -14,6 +14,7 @@ var baseOutputPath = 'web';
 
 var paths = {
 	html: [baseOriginalPath + '/index.html', baseOriginalPath + '/test.html'],
+	examples: [baseOriginalPath + '/examples/*.*'],
 	css: [baseOriginalPath + '/css/*.css'],
 	img: [baseOriginalPath + '/img/*.*'],
 	bootstrapDir: baseOriginalPath + '/bootstrap',
@@ -27,6 +28,7 @@ var paths = {
 
 var outputPaths = {
 	htmlFiles: baseOutputPath + '/*.html',
+	examples: baseOutputPath + '/examples',
 	css: baseOutputPath + '/css',
 	img: baseOutputPath + '/img',
 	js: baseOutputPath + '/js',
@@ -39,6 +41,7 @@ var outputPaths = {
 gulp.task('watch', ['default'], function() {
 	livereload.listen();
 	gulp.watch(paths.html, ['copy:html']);
+	gulp.watch(paths.examples, ['copy:examples']);
 	gulp.watch(paths.css, ['copy:css']);
 	gulp.watch(paths.img, ['copy:img']);
 	gulp.watch(paths.bootstrapFiles, ['copy:bootstraps']);
@@ -78,6 +81,13 @@ gulp.task('copy:html', function() {
 	return gulp.src(paths.html)
 		.pipe(newer(baseOutputPath))
 		.pipe(gulp.dest(baseOutputPath))
+		.pipe(livereload());
+});
+
+gulp.task('copy:examples', function() {
+	return gulp.src(paths.examples)
+		.pipe(newer(outputPaths.examples))
+		.pipe(gulp.dest(outputPaths.examples))
 		.pipe(livereload());
 });
 
