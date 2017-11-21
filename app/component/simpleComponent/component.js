@@ -8,7 +8,6 @@ class SimpleComponent extends HTMLElement {
 		this.internalShadowRoot = this.attachShadow({mode: 'open'})
 		this.internalShadowRoot.addEventListener('click', this._onClick)
 		this.internalShadowRoot.innerHTML = template()
-		this._button = this.shadowRoot.querySelector('button')
 	}
 
 	disconnectedCallback() {

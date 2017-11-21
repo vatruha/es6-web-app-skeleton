@@ -94,6 +94,7 @@ gulp.task('copy:component:js', function() {
 		.pipe(livereload());
 });
 
+// precompile all *.hbs files into *.js files
 gulp.task('copy:component:template', function() {
 	return gulp.src(paths.component + '*.hbs')
 		.pipe(newer({dest: outputPaths.component, ext: '.js'}))
@@ -147,6 +148,7 @@ gulp.task('copy:test:all', function() {
 		.pipe(gulp.dest(outputPaths.test));
 });
 
+// Import all test *.spec.js files into /test/bootstrap.js
 gulp.task('copy:test:bootstrap', function() {
 	return gulp.src(paths.test + 'bootstrap.js')
 		.pipe(inject(gulp.src(paths.test + '*.spec.js', {read: false}), {
@@ -160,6 +162,7 @@ gulp.task('copy:test:bootstrap', function() {
 		.pipe(gulp.dest(outputPaths.test));
 });
 
+// combine all vendors into one /js/vendors.js file
 gulp.task('copy:vendor', function() {
 	return gulp.src(paths.vendors)
 		.pipe(newer(outputPaths.js + '/' + vendorFileName))
