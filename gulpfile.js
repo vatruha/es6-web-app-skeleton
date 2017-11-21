@@ -11,71 +11,67 @@ var inject = require('gulp-inject');
 
 var baseOriginalPath = 'app';
 var baseOutputPath = 'web';
+var vendorFileName = 'vendors.js';
 
 var paths = {
-	html: [baseOriginalPath + '/index.html', baseOriginalPath + '/test.html'],
-	examples: [baseOriginalPath + '/examples/*.*'],
+	html: baseOriginalPath + '/*.html',
+	bootstrap: baseOriginalPath + '/bootstrap/**/*.*',
+	component: [baseOriginalPath + '/component/**/'],
 	css: [baseOriginalPath + '/css/*.css'],
+	demo: [baseOriginalPath + '/demo/*.*'],
 	img: [baseOriginalPath + '/img/*.*'],
-	bootstrapDir: baseOriginalPath + '/bootstrap',
-	bootstrapFiles: [baseOriginalPath + '/bootstrap/**/*.js'],
-	module: [baseOriginalPath + '/module/**/*.js'],
-	component: [baseOriginalPath + '/component/**/*.js'],
-	template: [baseOriginalPath + '/component/**/*.hbs'],
-	test: [baseOriginalPath + '/test/**/*.js', baseOriginalPath + '/test/**/*.json'],
-	testSpec: [baseOriginalPath + '/test/**/*.spec.js']
+	module: [baseOriginalPath + '/module/**/*.*'],
+	test: [baseOriginalPath + '/test/**/'],
+	vendors: ['node_modules/handlebars/dist/handlebars.runtime.js']
 };
 
 var outputPaths = {
-	htmlFiles: baseOutputPath + '/*.html',
-	examples: baseOutputPath + '/examples',
-	css: baseOutputPath + '/css',
-	img: baseOutputPath + '/img',
-	js: baseOutputPath + '/js',
-	module: baseOutputPath + '/module',
+	html: baseOutputPath + '/*.html',
+	bootstrap: baseOutputPath + '/bootstrap',
 	component: baseOutputPath + '/component',
+	css: baseOutputPath + '/css',
+	demo: baseOutputPath + '/demo',
+	img: baseOutputPath + '/img',
+	module: baseOutputPath + '/module',
 	test: baseOutputPath + '/test',
-	vendorFile: baseOutputPath + '/js/vendors.js'
+	js: baseOutputPath + '/js'
 }
 
 gulp.task('watch', ['default'], function() {
 	livereload.listen();
 	gulp.watch(paths.html, ['copy:html']);
-	gulp.watch(paths.examples, ['copy:examples']);
+	gulp.watch(paths.bootstrap, ['copy:bootstrap']);
+	gulp.watch(paths.component + '*.*', ['copy:component']);
 	gulp.watch(paths.css, ['copy:css']);
+	gulp.watch(paths.demo, ['copy:demo']);
 	gulp.watch(paths.img, ['copy:img']);
-	gulp.watch(paths.bootstrapFiles, ['copy:bootstraps']);
-	gulp.watch(paths.module, ['copy:modules']);
-	gulp.watch(paths.component, ['copy:components']);
-	gulp.watch(paths.template, ['compile-component-templates']);
-	gulp.watch(paths.test, ['copy:tests', 'copy:bootstrapTest']);
+	gulp.watch(paths.module, ['copy:module']);
+	gulp.watch(paths.test + '*.*', ['copy:test']);
 });
 
-gulp.task('default', ['compile-component-templates', 'copy']);
+gulp.task('default', ['copy']);
 
 gulp.task('clean', function () {
 	return del([
-		outputPaths.htmlFiles,
-		outputPaths.css,
-		outputPaths.img,
-		outputPaths.js,
-		outputPaths.module,
+		outputPaths.html,
+		outputPaths.bootstrap,
 		outputPaths.component,
-		outputPaths.test
+		outputPaths.css,
+		outputPaths.demo,
+		outputPaths.img,
+		outputPaths.module,
+		outputPaths.test,
+		outputPaths.js
 	])
 });
 
-gulp.task('copy', ['copy:html', 'copy:css', 'copy:img', 'copy:bootstraps', 'copy:modules', 'copy:components', 'copy:vendors', 'copy:tests']);
+gulp.task('copy', ['copy:html', 'copy:bootstrap', 'copy:component', 'copy:asset', 'copy:demo', 'copy:module', 'copy:test', 'copy:vendor']);
 
-gulp.task('compile-component-templates', function() {
-	return gulp.src(paths.template)
-		.pipe(newer({dest: outputPaths.component, ext: '.js'}))
-		.pipe(precompileHandlebars())
-		.pipe(rename({ extname: '.js' }))
-		.pipe(defineModule('es6', {require: {Handlebars: null}}))
-		.pipe(gulp.dest(outputPaths.component))
-		.pipe(livereload());
-});
+gulp.task('copy:component', ['copy:component:js', 'copy:component:template', 'copy:component:other']);
+
+gulp.task('copy:asset', ['copy:css', 'copy:img']);
+
+gulp.task('copy:test', ['copy:test:all', 'copy:test:bootstrap']);
 
 gulp.task('copy:html', function() {
 	return gulp.src(paths.html)
@@ -84,10 +80,35 @@ gulp.task('copy:html', function() {
 		.pipe(livereload());
 });
 
-gulp.task('copy:examples', function() {
-	return gulp.src(paths.examples)
-		.pipe(newer(outputPaths.examples))
-		.pipe(gulp.dest(outputPaths.examples))
+gulp.task('copy:bootstrap', function() {
+	return gulp.src(paths.bootstrap)
+		.pipe(newer(outputPaths.bootstrap))
+		.pipe(gulp.dest(outputPaths.bootstrap))
+		.pipe(livereload());
+});
+
+gulp.task('copy:component:js', function() {
+	return gulp.src(paths.component + '*.js')
+		.pipe(newer(outputPaths.component))
+		.pipe(gulp.dest(outputPaths.component))
+		.pipe(livereload());
+});
+
+gulp.task('copy:component:template', function() {
+	return gulp.src(paths.component + '*.hbs')
+		.pipe(newer({dest: outputPaths.component, ext: '.js'}))
+		.pipe(precompileHandlebars())
+		.pipe(rename({extname: '.js'}))
+		.pipe(defineModule('es6', {require: {Handlebars: null}}))
+		.pipe(gulp.dest(outputPaths.component))
+		.pipe(livereload());
+});
+
+gulp.task('copy:component:other', function() {
+	var path = ['!' + paths.component + '*.js', '!' + paths.component + '*.hbs', paths.component + '*.*']
+	return gulp.src(path)
+		.pipe(newer(outputPaths.component))
+		.pipe(gulp.dest(outputPaths.component))
 		.pipe(livereload());
 });
 
@@ -98,6 +119,13 @@ gulp.task('copy:css', function() {
 		.pipe(livereload());
 });
 
+gulp.task('copy:demo', function() {
+	return gulp.src(paths.demo)
+		.pipe(newer(outputPaths.demo))
+		.pipe(gulp.dest(outputPaths.demo))
+		.pipe(livereload());
+});
+
 gulp.task('copy:img', function() {
 	return gulp.src(paths.img)
 		.pipe(newer(outputPaths.img))
@@ -105,17 +133,23 @@ gulp.task('copy:img', function() {
 		.pipe(livereload());
 });
 
-gulp.task('copy:bootstraps', ['copy:bootstrap', 'copy:bootstrapTest']);
-
-gulp.task('copy:bootstrap', function() {
-	return gulp.src(paths.bootstrapDir + '/bootstrap.js')
-		.pipe(gulp.dest(outputPaths.js))
+gulp.task('copy:module', function() {
+	return gulp.src(paths.module)
+		.pipe(newer(outputPaths.module))
+		.pipe(gulp.dest(outputPaths.module))
 		.pipe(livereload());
 });
 
-gulp.task('copy:bootstrapTest', function() {
-	return gulp.src(paths.bootstrapDir + '/bootstrapTest.js')
-		.pipe(inject(gulp.src(paths.testSpec, {read: false}), {
+gulp.task('copy:test:all', function() {
+	var path = ['!' + paths.test + 'bootstrap.js', paths.test + '*.*']
+	return gulp.src(path)
+		.pipe(newer(outputPaths.test))
+		.pipe(gulp.dest(outputPaths.test));
+});
+
+gulp.task('copy:test:bootstrap', function() {
+	return gulp.src(paths.test + 'bootstrap.js')
+		.pipe(inject(gulp.src(paths.test + '*.spec.js', {read: false}), {
 			starttag: '//tests start',
 			endtag: '//tests end',
 			ignorePath: "/" + baseOriginalPath,
@@ -123,34 +157,14 @@ gulp.task('copy:bootstrapTest', function() {
 				return 'import "' + filepath + '";';
 			}
 		}))
-		.pipe(gulp.dest(outputPaths.js))
-		.pipe(livereload());
+		.pipe(gulp.dest(outputPaths.test));
 });
 
-gulp.task('copy:modules', function() {
-	return gulp.src(paths.module)
-		.pipe(newer(outputPaths.module))
-		.pipe(gulp.dest(outputPaths.module))
-		.pipe(livereload());
-});
-
-gulp.task('copy:components', function() {
-	return gulp.src(paths.component)
-		.pipe(newer(outputPaths.component))
-		.pipe(gulp.dest(outputPaths.component))
-		.pipe(livereload());
-});
-
-gulp.task('copy:vendors', function() {
-	return gulp.src('node_modules/handlebars/dist/handlebars.runtime.js')
-		.pipe(newer(outputPaths.vendorFile))
+gulp.task('copy:vendor', function() {
+	return gulp.src(paths.vendors)
+		.pipe(newer(outputPaths.js + '/' + vendorFileName))
 		.pipe(sourcemaps.init())
-			.pipe(concat('vendors.js'))
+			.pipe(concat(vendorFileName))
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(outputPaths.js));
-});
-
-gulp.task('copy:tests', function() {
-	return gulp.src(paths.test)
-		.pipe(gulp.dest(outputPaths.test));
 });

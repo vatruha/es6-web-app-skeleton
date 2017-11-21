@@ -15,7 +15,7 @@ module.exports = function(config) {
 			{pattern: 'web/**/*.js', watched: false, included: false, served: true, nocache: false},
 			{pattern: 'web/**/*.json', watched: false, included: false, served: true, nocache: false},
 			{pattern: 'web/img/**/*.*', watched: false, included: false, served: true, nocache: false},
-			'web/test.html'
+			'web/test/test.html'
 		],
 
 

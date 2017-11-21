@@ -1,7 +1,7 @@
 {
   "name": "es6-web-app-skeleton",
   "description": "The skeleton of a web application with native ES6 custom elements, ES6 modules, ES6 features and unit tests",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"author": "Dima Popovichenko (Vatruha)",
 	"license": "Apache-2.0",
   "scripts": {

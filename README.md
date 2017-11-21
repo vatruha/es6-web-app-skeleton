@@ -15,25 +15,29 @@ Execute `git clone https://github.com/vatruha/es6-web-app-skeleton.git` to clone
 ```
 .
 ├── app/                 location of js application
-│   ├── bootstrap/       boostrap files for the app and tests
+│   ├── bootstrap/       boostrap files for the app
 │   ├── component/       components
 │   ├── css/             not related to components css files
-│   ├── examples/        examples of components/modules usage
+│   ├── demo/            demos of components/modules usage
 │   ├── img/             not related to components images
 │   ├── module/          modules
 │   ├── test/            modules/components/ets tests are located there
-│   ├── index.html       
-│   └── test.html        this file is used in mocha for tests
+│   │   ├─ component/
+│   │   ├─ module/
+│   │   ├─ bootsrap.js   a boostrap for tests
+│   │   ├─ helpers.js    different helpers used in tests
+│   │   └─ test.html     a main page for tests. It's needed due to ES6 modules
+│   └── index.html       
 ├── web/                 public folder with copied/parsed/combined/etc files
+│   ├── bootstrap/
 │   ├── component/       
 │   ├── css/             
-│   ├── examples/        
+│   ├── demo/        
 │   ├── img/             
-│   ├── js/              bootstrap and vendors files
+│   ├── js/              vendors files
 │   ├── module/          
 │   ├── test/            
-│   ├── index.html
-│   └── test.html
+│   └─── index.html
 ├── gulpfile.js
 ├── karma.conf.js  
 ├── LICENSE
