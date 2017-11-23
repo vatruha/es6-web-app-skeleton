@@ -20,7 +20,7 @@ module.exports = {
 		"quotes": [2, "single"],
 		"strict": [2, "global"],
 		"prefer-const": 2,
-		"semi": 2
+		"semi": 0
 	},
 	"parserOptions": {
 		"ecmaVersion": 2017,

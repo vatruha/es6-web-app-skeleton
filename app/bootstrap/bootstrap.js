@@ -1,3 +1,3 @@
-import '/module/HBHelpers/HBHelpers.js';
+import '/module/HBHelpers/HBHelpers.js'
 
-import '/component/simpleComponent/component.js';
+import '/component/simpleComponent/component.js'
