@@ -6,107 +6,107 @@
 
 class Transmitter {
 	constructor() {
-		this.callbacksMap = new Map()
-		this.lastUid = -1
+		this.callbacksMap = new Map();
+		this.lastUid = -1;
 	}
 
 	subscribe(topic, callback) {
 		if (typeof topic !== 'string' || typeof callback !== 'function') {
-			return false
+			return false;
 		}
 
 		// topic is not registered yet
 		if (!this.callbacksMap.has(topic)) {
-			this.callbacksMap.set(topic, new Map())
+			this.callbacksMap.set(topic, new Map());
 		}
 
-		let token = 'transmitter_uid_' + String(++this.lastUid)
-		this.callbacksMap.get(topic).set(token, callback)
+		const token = 'transmitter_uid_' + String(++this.lastUid);
+		this.callbacksMap.get(topic).set(token, callback);
 
-		return token
+		return token;
 	}
 
 	publish(topic, message) {
 		if (typeof topic !== 'string') {
-			return false
+			return false;
 		}
 
 		if (this._topicHasSubscribers(topic)) {
 			setTimeout(() => {
 				if (this._topicHasSubscribers(topic)) {
-					this._callSubscribers(this.callbacksMap.get(topic), topic, message)
+					this._callSubscribers(this.callbacksMap.get(topic), topic, message);
 				}
-			}, 0)
+			}, 0);
 		}
 
-		return true
+		return true;
 	}
 
 	unsubscribe(value) {
-		let result = false,
-			isTopic = typeof value === 'string' && this.callbacksMap.has(value),
-			isToken = !isTopic && typeof value === 'string',
-			isFunction = typeof value === 'function'
+		let result = false;
+		const isTopic = typeof value === 'string' && this.callbacksMap.has(value);
+		const isToken = !isTopic && typeof value === 'string';
+		const isFunction = typeof value === 'function';
 
 		if (isTopic) {
-			this.callbacksMap.delete(value)
-			return true
+			this.callbacksMap.delete(value);
+			return true;
 		}
 
 		if (!isToken && !isFunction) {
-			return false
+			return false;
 		}
 
-		for (let topicCallbacks of this.callbacksMap.values()) {
+		for (const topicCallbacks of this.callbacksMap.values()) {
 			if (isToken && topicCallbacks.has(value)) {
-				topicCallbacks.delete(value)
-				result = true
-				break
+				topicCallbacks.delete(value);
+				result = true;
+				break;
 			}
 
 			if (isFunction) {
-				for (let [token, tokenCallback] of topicCallbacks) {
+				for (const [token, tokenCallback] of topicCallbacks) {
 					if (tokenCallback === value) {
-						topicCallbacks.delete(token)
-						result = true
+						topicCallbacks.delete(token);
+						result = true;
 					}
 				}
 			}
 		}
 
-		return result
+		return result;
 	}
 
 	clearAllSubscriptions() {
-		this.callbacksMap = new Map()
-		return true
+		this.callbacksMap = new Map();
+		return true;
 	}
 
 	_topicHasSubscribers(topic) {
-		return this.callbacksMap.has(topic) && this.callbacksMap.get(topic).size
+		return this.callbacksMap.has(topic) && this.callbacksMap.get(topic).size;
 	}
 
 	_callSubscribers(subscribers, topic, message) {
-		for (let callback of subscribers.values()) {
+		for (const callback of subscribers.values()) {
 			try {
-				callback(topic, message)
+				callback(topic, message);
 			} catch (e) {
-				this._asyncReThrowException(e)
+				this._asyncReThrowException(e);
 			}
 		}
 	}
 
 	_asyncReThrowException(e) {
 		setTimeout(() => {
-			this._triggerException(e)
-		}, 0)
+			this._triggerException(e);
+		}, 0);
 	}
 
 	// this code in a separate function to allow cover by unit tests
 	_triggerException(e) {
-		throw e
+		throw e;
 	}
 }
 
-let transmitter = new Transmitter()
-export {transmitter, Transmitter}
+const transmitter = new Transmitter();
+export {transmitter, Transmitter};

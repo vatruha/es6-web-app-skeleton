@@ -1,73 +1,74 @@
-import helpers from "/module/helpers/helpers.js"
+import helpers from '/module/helpers/helpers.js';
 
 async function fetchAsync(url) {
-	return fetch(url)
+	return fetch(url);
 }
 
 function isIterable(obj) {
 	// checks for null and undefined
 	if (obj == null) {
-		return false
+		return false;
 	}
-	return typeof obj[Symbol.iterator] === 'function'
+	return typeof obj[Symbol.iterator] === 'function';
 }
 
 class DataProvider {
 	constructor() {
-		this.urls = new Map()
-		this.timeToWait = 2000
+		this.urls = new Map();
+		this.timeToWait = 2000;
 	}
 
 	set timeToWait(timeToWaitInMilliseconds) {
-		this.timeToWaitInMilliseconds = timeToWaitInMilliseconds
+		this.timeToWaitInMilliseconds = timeToWaitInMilliseconds;
 	}
 
 	async loadUrls(baseUrl) {
 		try {
-			let response = await fetchAsync(baseUrl)
-			this.urls = new Map(Object.entries(await response.json()))
+			const response = await fetchAsync(baseUrl);
+			this.urls = new Map(Object.entries(await response.json()));
 		} catch (e) {
-			this.urls = new Map()
-			throw new Error('Data is not loaded')
+			this.urls = new Map();
+			throw new Error('Data is not loaded');
 		}
 	}
 
 	async load(url, params) {
+		let response;
 		try {
-			let counter = this.timeToWaitInMilliseconds / 50
+			let counter = this.timeToWaitInMilliseconds / 50;
 			while (this.urls.size === 0 && counter > 0) {
-				await helpers.timeout(50)
-				counter--
+				await helpers.timeout(50);
+				counter--;
 			}
 
 			if (!this.urls.has(url)) {
-				throw new Error('Wrong url')
+				throw new Error('Wrong url');
 			}
 
-			let requestUrl = this.urls.get(url)
-			requestUrl = this._insertTokensIntoUrl(requestUrl, params)
-			var response = await fetchAsync(requestUrl)
+			let requestUrl = this.urls.get(url);
+			requestUrl = this._insertTokensIntoUrl(requestUrl, params);
+			response = await fetchAsync(requestUrl);
 		} catch (e) {
-			response = false
+			response = false;
 		}
 
-		return response
+		return response;
 	}
 
 	_insertTokensIntoUrl(requestUrl, params) {
 		if (typeof params === 'object') {
-			let paramsMap = new Map(Object.entries(params))
+			const paramsMap = new Map(Object.entries(params));
 
 			if (isIterable(paramsMap)) {
-				for (let pair of paramsMap) {
-					requestUrl = requestUrl.replace(new RegExp('%' + pair[0] + '%', 'g'), pair[1])
+				for (const pair of paramsMap) {
+					requestUrl = requestUrl.replace(new RegExp('%' + pair[0] + '%', 'g'), pair[1]);
 				}
 			}
 		}
 
-		return requestUrl
+		return requestUrl;
 	}
 }
 
-let dataProvider = new DataProvider()
-export {dataProvider, DataProvider}
+const dataProvider = new DataProvider();
+export {dataProvider, DataProvider};

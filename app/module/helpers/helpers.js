@@ -1,7 +1,7 @@
 class Helpers {
 	timeout(ms) {
-		return new Promise(resolve => setTimeout(resolve, ms))
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 }
 
-export default new Helpers()
+export default new Helpers();
