@@ -58,7 +58,8 @@ describe('DataProvider', () => {
 		assert.deepEqual(data, {a: 'bbb'})
 	})
 
-	it('should wait and return Response with data when a correct url is used and the initial url is set with delay', async () => {
+	it('should wait and return Response with data' +
+		'when a correct url is used and the initial url is set with delay', async () => {
 		setTimeout(() => {
 			dataProvider.loadUrls('/test/module/dataProvider/dataProvider1.data.json')
 		}, 1)
@@ -115,7 +116,7 @@ describe('DataProvider', () => {
 		try {
 			await dataProvider.loadUrls('/wrong url')
 		} catch (e) {
-			assert.isTrue(false)
+			// nothing
 		}
 		response = await dataProvider.load('url1')
 		assert.isFalse(response)

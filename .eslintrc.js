@@ -17,10 +17,11 @@ module.exports = {
 			"string": true
 		}],
 		"no-unused-vars": 2,
-		"quotes": [2, "single"],
-		"strict": [2, "global"],
+		"prefer-arrow-callback": 2,
 		"prefer-const": 2,
-		"semi": 0
+		"quotes": [2, "single"],
+		"semi": [2, "never"],
+		"strict": [2, "global"]
 	},
 	"parserOptions": {
 		"ecmaVersion": 2017,

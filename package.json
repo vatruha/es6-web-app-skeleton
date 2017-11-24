@@ -1,12 +1,15 @@
 {
 	"name": "es6-web-app-skeleton",
 	"description": "The skeleton of a web application with native ES6 custom elements, ES6 modules, ES6 features and unit tests",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": "Dima Popovichenko (Vatruha)",
 	"license": "Apache-2.0",
 	"scripts": {
-		"test": "npm run lint & karma start --single-run --browsers ChromeHeadless karma.conf.js",
-		"lint": "eslint ./app"
+		"build": "npm run gulp && npm run lint && npm run test",
+		"gulp": "gulp clean && gulp default",
+		"lint": "eslint ./app",
+		"test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
+		"watch": "gulp clean && gulp watch"
 	},
 	"repository": {
 		"type": "git",

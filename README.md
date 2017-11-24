@@ -47,8 +47,11 @@ Execute `git clone https://github.com/vatruha/es6-web-app-skeleton.git` to clone
 
 ## Usage
 
-* Execute `gulp clean && gulp watch` to run gulp 
-* Execute `npm run test` to run tests
+* Execute `npm run build` to build the app, lint it, put it into the `web` folder and test it
+* Execute `npm run gulp` to build the app and put it into the `web` folder
+* Execute `npm run lint` to lint the app
+* Execute `npm run test` to test the app
+* Execute `npm run watch` to build the app, put it into the `web` folder and watch for changes
 
 ## License
 

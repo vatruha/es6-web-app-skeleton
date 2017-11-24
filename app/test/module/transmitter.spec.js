@@ -33,11 +33,11 @@ function assertAllTokensDifferent(tokens) {
 }
 
 describe('Transmitter', () => {
-	beforeEach(function() {
+	beforeEach(() => {
 		transmitter = new Transmitter()
 	})
 
-	afterEach(function() {
+	afterEach(() => {
 		transmitter = null
 	})
 
@@ -51,7 +51,7 @@ describe('Transmitter', () => {
 			const topic = getUniqueString()
 			const invalidSubscribers = [undefined, null, 'a string', 123, [], {}, new Date()]
 
-			invalidSubscribers.forEach(function (callback) {
+			invalidSubscribers.forEach((callback) => {
 				assert.isFalse(transmitter.subscribe(topic, callback))
 			})
 		})
@@ -60,7 +60,7 @@ describe('Transmitter', () => {
 			const callback = sinon.spy()
 			const invalidTopics = [undefined, null, 123, [], {}, new Date()]
 
-			invalidTopics.forEach(function (topic) {
+			invalidTopics.forEach((topic) => {
 				assert.isFalse(transmitter.subscribe(topic, callback))
 			})
 		})
@@ -83,7 +83,7 @@ describe('Transmitter', () => {
 				return () => value
 			}
 
-			for (const i = 0; i < 10; i++) {
+			for (let i = 0; i < 10; i++) {
 				tokens.push(transmitter.subscribe(topic, getCallback(i)))
 			}
 
@@ -95,7 +95,7 @@ describe('Transmitter', () => {
 		it('should return false when a topic is not a string', () => {
 			const invalidTopics = [undefined, null, 123, [], {}, new Date()]
 
-			invalidTopics.forEach(function (topic) {
+			invalidTopics.forEach((topic) => {
 				assert.isFalse(transmitter.publish(topic, getUniqueString()))
 			})
 		})
