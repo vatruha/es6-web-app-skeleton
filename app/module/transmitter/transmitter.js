@@ -20,7 +20,7 @@ class Transmitter {
 			this.callbacksMap.set(topic, new Map())
 		}
 
-		let token = 'transmitter_uid_' + String(++this.lastUid)
+		const token = 'transmitter_uid_' + String(++this.lastUid)
 		this.callbacksMap.get(topic).set(token, callback)
 
 		return token
@@ -43,10 +43,10 @@ class Transmitter {
 	}
 
 	unsubscribe(value) {
-		let result = false,
-			isTopic = typeof value === 'string' && this.callbacksMap.has(value),
-			isToken = !isTopic && typeof value === 'string',
-			isFunction = typeof value === 'function'
+		let result = false
+		const isTopic = typeof value === 'string' && this.callbacksMap.has(value)
+		const isToken = !isTopic && typeof value === 'string'
+		const isFunction = typeof value === 'function'
 
 		if (isTopic) {
 			this.callbacksMap.delete(value)
@@ -57,7 +57,7 @@ class Transmitter {
 			return false
 		}
 
-		for (let topicCallbacks of this.callbacksMap.values()) {
+		for (const topicCallbacks of this.callbacksMap.values()) {
 			if (isToken && topicCallbacks.has(value)) {
 				topicCallbacks.delete(value)
 				result = true
@@ -65,7 +65,7 @@ class Transmitter {
 			}
 
 			if (isFunction) {
-				for (let [token, tokenCallback] of topicCallbacks) {
+				for (const [token, tokenCallback] of topicCallbacks) {
 					if (tokenCallback === value) {
 						topicCallbacks.delete(token)
 						result = true
@@ -87,7 +87,7 @@ class Transmitter {
 	}
 
 	_callSubscribers(subscribers, topic, message) {
-		for (let callback of subscribers.values()) {
+		for (const callback of subscribers.values()) {
 			try {
 				callback(topic, message)
 			} catch (e) {
@@ -108,5 +108,5 @@ class Transmitter {
 	}
 }
 
-let transmitter = new Transmitter()
+const transmitter = new Transmitter()
 export {transmitter, Transmitter}

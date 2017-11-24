@@ -1,26 +1,31 @@
 {
-  "name": "es6-web-app-skeleton",
-  "description": "The skeleton of a web application with native ES6 custom elements, ES6 modules, ES6 features and unit tests",
-	"version": "0.0.3",
+	"name": "es6-web-app-skeleton",
+	"description": "The skeleton of a web application with native ES6 custom elements, ES6 modules, ES6 features and unit tests",
+	"version": "0.0.4",
 	"author": "Dima Popovichenko (Vatruha)",
 	"license": "Apache-2.0",
-  "scripts": {
-		"test": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vatruha/es6-web-app-skeleton.git"
-  },
-  "bugs": {
-    "url": "https://github.com/vatruha/es6-web-app-skeleton/issues"
-  },
-  "homepage": "https://github.com/vatruha/es6-web-app-skeleton#readme",
+	"scripts": {
+		"build": "npm run gulp && npm run lint && npm run test",
+		"gulp": "gulp clean && gulp default",
+		"lint": "eslint ./app",
+		"test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
+		"watch": "gulp clean && gulp watch"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/vatruha/es6-web-app-skeleton.git"
+	},
+	"bugs": {
+		"url": "https://github.com/vatruha/es6-web-app-skeleton/issues"
+	},
+	"homepage": "https://github.com/vatruha/es6-web-app-skeleton#readme",
 	"dependencies": {
 		"handlebars": "^4.0.11"
 	},
 	"devDependencies": {
 		"chai": "^4.1.2",
 		"del": "^3.0.0",
+		"eslint": "^4.11.0",
 		"gulp": "^3.9.1",
 		"gulp-concat": "^2.6.1",
 		"gulp-define-module": "^0.1.5",

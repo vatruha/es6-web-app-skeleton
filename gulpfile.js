@@ -156,7 +156,7 @@ gulp.task('copy:test:bootstrap', function() {
 			endtag: '//tests end',
 			ignorePath: "/" + baseOriginalPath,
 			transform: function (filepath) {
-				return 'import "' + filepath + '";';
+				return 'import \'' + filepath + '\'';
 			}
 		}))
 		.pipe(gulp.dest(outputPaths.test));

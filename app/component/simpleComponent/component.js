@@ -1,4 +1,4 @@
-import template from "./template.js"
+import template from './template.js'
 
 class SimpleComponent extends HTMLElement {
 	constructor() {

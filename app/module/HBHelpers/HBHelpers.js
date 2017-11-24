@@ -1,4 +1,4 @@
-let Hb = Handlebars
+const Hb = Handlebars
 
 Hb.registerHelper('ifCond', function (v1, operator, v2, options) {
 	switch (operator) {

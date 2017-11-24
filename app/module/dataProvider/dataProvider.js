@@ -1,4 +1,4 @@
-import helpers from "/module/helpers/helpers.js"
+import helpers from '/module/helpers/helpers.js'
 
 async function fetchAsync(url) {
 	return fetch(url)
@@ -24,7 +24,7 @@ class DataProvider {
 
 	async loadUrls(baseUrl) {
 		try {
-			let response = await fetchAsync(baseUrl)
+			const response = await fetchAsync(baseUrl)
 			this.urls = new Map(Object.entries(await response.json()))
 		} catch (e) {
 			this.urls = new Map()
@@ -33,6 +33,7 @@ class DataProvider {
 	}
 
 	async load(url, params) {
+		let response
 		try {
 			let counter = this.timeToWaitInMilliseconds / 50
 			while (this.urls.size === 0 && counter > 0) {
@@ -46,7 +47,7 @@ class DataProvider {
 
 			let requestUrl = this.urls.get(url)
 			requestUrl = this._insertTokensIntoUrl(requestUrl, params)
-			var response = await fetchAsync(requestUrl)
+			response = await fetchAsync(requestUrl)
 		} catch (e) {
 			response = false
 		}
@@ -56,10 +57,10 @@ class DataProvider {
 
 	_insertTokensIntoUrl(requestUrl, params) {
 		if (typeof params === 'object') {
-			let paramsMap = new Map(Object.entries(params))
+			const paramsMap = new Map(Object.entries(params))
 
 			if (isIterable(paramsMap)) {
-				for (let pair of paramsMap) {
+				for (const pair of paramsMap) {
 					requestUrl = requestUrl.replace(new RegExp('%' + pair[0] + '%', 'g'), pair[1])
 				}
 			}
@@ -69,5 +70,5 @@ class DataProvider {
 	}
 }
 
-let dataProvider = new DataProvider()
+const dataProvider = new DataProvider()
 export {dataProvider, DataProvider}

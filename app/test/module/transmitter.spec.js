@@ -1,5 +1,5 @@
-import {Transmitter} from "/module/transmitter/transmitter.js"
-import helpers from "/module/helpers/helpers.js"
+import {Transmitter} from '/module/transmitter/transmitter.js'
+import helpers from '/module/helpers/helpers.js'
 let transmitter
 
 /**
@@ -12,7 +12,7 @@ function getUniqueString() {
 	}
 	getUniqueString.uid++
 
-	return "Unique string " + getUniqueString.uid.toString()
+	return `Unique string ${getUniqueString.uid.toString()}`
 }
 
 /**
@@ -20,7 +20,7 @@ function getUniqueString() {
  * @param tokens
  */
 function assertAllTokensDifferent(tokens) {
-	let length = tokens.length
+	const length = tokens.length
 
 	assert.isAbove(length, 0)
 
@@ -33,40 +33,41 @@ function assertAllTokensDifferent(tokens) {
 }
 
 describe('Transmitter', () => {
-	beforeEach(function() {
+	beforeEach(() => {
 		transmitter = new Transmitter()
 	})
 
-	afterEach(function() {
+	afterEach(() => {
 		transmitter = null
 	})
 
 	describe('subscribe()', () => {
-		it("should return token as String", function () {
-			let callback = sinon.spy()
+		it('should return token as String', () => {
+			const callback = sinon.spy()
 			assert.isString(transmitter.subscribe(getUniqueString(), callback))
 		})
 
-		it("should return false when a subscriber is not a function", function () {
-			let topic = getUniqueString(),
-				invalidSubscribers = [undefined, null, 'a string', 123, [], {}, new Date()]
+		it('should return false when a subscriber is not a function', () => {
+			const topic = getUniqueString()
+			const invalidSubscribers = [undefined, null, 'a string', 123, [], {}, new Date()]
 
-			invalidSubscribers.forEach(function (callback) {
+			invalidSubscribers.forEach((callback) => {
 				assert.isFalse(transmitter.subscribe(topic, callback))
 			})
 		})
 
-		it("should return false when a topic is not a string", function () {
-			let callback = sinon.spy(),
-				invalidTopics = [undefined, null, 123, [], {}, new Date()]
+		it('should return false when a topic is not a string', () => {
+			const callback = sinon.spy()
+			const invalidTopics = [undefined, null, 123, [], {}, new Date()]
 
-			invalidTopics.forEach(function (topic) {
+			invalidTopics.forEach((topic) => {
 				assert.isFalse(transmitter.subscribe(topic, callback))
 			})
 		})
 
-		it("should return unique tokens for several subscriptions with the same callback", function () {
-			let tokens = [], callback = sinon.spy()
+		it('should return unique tokens for several subscriptions with the same callback', () => {
+			const tokens = []
+			const callback = sinon.spy()
 
 			for (let i = 0; i < 10; i++) {
 				tokens.push(transmitter.subscribe(getUniqueString(), callback))
@@ -75,14 +76,12 @@ describe('Transmitter', () => {
 			assertAllTokensDifferent(tokens)
 		})
 
-		it("should return unique tokens for different subscribers", function () {
-			let topic = getUniqueString(),
-				tokens = [],
-				getCallback = function (value) {
-					return function () {
-						return value
-					}
-				}
+		it('should return unique tokens for different subscribers', () => {
+			const topic = getUniqueString()
+			const tokens = []
+			const getCallback = value => {
+				return () => value
+			}
 
 			for (let i = 0; i < 10; i++) {
 				tokens.push(transmitter.subscribe(topic, getCallback(i)))
@@ -93,27 +92,27 @@ describe('Transmitter', () => {
 	})
 
 	describe('publish()', () => {
-		it("should return false when a topic is not a string", function () {
-			let invalidTopics = [undefined, null, 123, [], {}, new Date()]
+		it('should return false when a topic is not a string', () => {
+			const invalidTopics = [undefined, null, 123, [], {}, new Date()]
 
-			invalidTopics.forEach(function (topic) {
+			invalidTopics.forEach((topic) => {
 				assert.isFalse(transmitter.publish(topic, getUniqueString()))
 			})
 		})
 
-		it("should return true when publishing", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy()
+		it('should return true when publishing', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
 
 			transmitter.subscribe(topic, callback)
 
 			assert.isTrue(transmitter.publish(topic, getUniqueString()))
 		})
 
-		it("should call callback async when publishing", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should call callback async when publishing', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 
@@ -125,11 +124,11 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should pass a correct message into a callback and call it when publishing", function () {
-			let topic = getUniqueString(),
-				message = {'q': getUniqueString(), 'w': getUniqueString()},
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should pass a correct message into a callback and call it when publishing', () => {
+			const topic = getUniqueString()
+			const message = {'q': getUniqueString(), 'w': getUniqueString()}
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 			transmitter.publish(topic, message)
@@ -140,17 +139,17 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should return true when publishing without subscribers assigned to that topic", function () {
-			let callback = sinon.spy()
+		it('should return true when publishing without subscribers assigned to that topic', () => {
+			const callback = sinon.spy()
 
 			transmitter.subscribe(getUniqueString(), callback)
 			assert.isTrue(transmitter.publish(getUniqueString(), getUniqueString()))
 		})
 
-		it("should call the same callback several times when publishing a message to the same topic several times", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should call the same callback several times when publishing a message to the same topic several times', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 			transmitter.publish(topic, getUniqueString())
@@ -162,10 +161,10 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("after clearing of all subscriptions should return true when publishing", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('after clearing of all subscriptions should return true when publishing', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 			transmitter.clearAllSubscriptions()
@@ -173,10 +172,10 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("after clearing of all subscriptions should not call a callback when publishing", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('after clearing of all subscriptions should not call a callback when publishing', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 			transmitter.clearAllSubscriptions()
@@ -187,15 +186,15 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should call all subscribers, even if there are exceptions", async function () {
-			let topic = getUniqueString(),
-				callbackInException = sinon.spy(),
-				stub = sinon.stub(transmitter, "_triggerException").callsFake(callbackInException),
-				callback1 = function () {
-					throw new Error('some error')
-				},
-				callback2 = sinon.spy(),
-				callback3 = sinon.spy()
+		it('should call all subscribers, even if there are exceptions', async () => {
+			const topic = getUniqueString()
+			const callbackInException = sinon.spy()
+			const stub = sinon.stub(transmitter, '_triggerException').callsFake(callbackInException)
+			const callback1 = () => {
+				throw new Error('some error')
+			}
+			const callback2 = sinon.spy()
+			const callback3 = sinon.spy()
 
 			transmitter.subscribe(topic, callback1)
 			transmitter.subscribe(topic, callback2)
@@ -212,83 +211,83 @@ describe('Transmitter', () => {
 	})
 
 	describe('unsubscribe()', () => {
-		it("should return true when unsubscribe all", function () {
-			let topic = getUniqueString(),
-				callback1 = sinon.spy(),
-				callback2 = sinon.spy()
+		it('should return true when unsubscribe all', () => {
+			const topic = getUniqueString()
+			const callback1 = sinon.spy()
+			const callback2 = sinon.spy()
 
 			transmitter.subscribe(topic, callback1)
 			transmitter.subscribe(topic, callback2)
-			let result = transmitter.clearAllSubscriptions()
+			const result = transmitter.clearAllSubscriptions()
 
 			assert.isTrue(result)
 		})
 
-		it("should return false when unsubscribe a non existing topic", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy()
+		it('should return false when unsubscribe a non existing topic', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
 
 			transmitter.subscribe(topic, callback)
-			let result = transmitter.unsubscribe(getUniqueString())
+			const result = transmitter.unsubscribe(getUniqueString())
 
 			assert.isFalse(result)
 		})
 
-		it("should return true when unsubscribe an existing topic", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy()
+		it('should return true when unsubscribe an existing topic', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
 
 			transmitter.subscribe(topic, callback)
-			let result = transmitter.unsubscribe(topic)
+			const result = transmitter.unsubscribe(topic)
 
 			assert.isTrue(result)
 		})
 
-		it("should return false when unsubscribe a non existing token", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy()
+		it('should return false when unsubscribe a non existing token', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
 
 			transmitter.subscribe(topic, callback)
-			let result = transmitter.unsubscribe(getUniqueString())
+			const result = transmitter.unsubscribe(getUniqueString())
 
 			assert.isFalse(result)
 		})
 
-		it("should return true when unsubscribe an existing token", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy()
+		it('should return true when unsubscribe an existing token', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
 
-			let token = transmitter.subscribe(topic, callback)
-			let result = transmitter.unsubscribe(token)
+			const token = transmitter.subscribe(topic, callback)
+			const result = transmitter.unsubscribe(token)
 
 			assert.isTrue(result)
 		})
 
-		it("should return false when unsubscribe a non existing callback", function () {
-			let topic = getUniqueString(),
-				callback1 = sinon.spy(),
-				callback2 = sinon.spy()
+		it('should return false when unsubscribe a non existing callback', () => {
+			const topic = getUniqueString()
+			const callback1 = sinon.spy()
+			const callback2 = sinon.spy()
 
 			transmitter.subscribe(topic, callback1)
-			let result = transmitter.unsubscribe(callback2)
+			const result = transmitter.unsubscribe(callback2)
 
 			assert.isFalse(result)
 		})
 
-		it("should return true when unsubscribe an existing callback", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy()
+		it('should return true when unsubscribe an existing callback', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
 
 			transmitter.subscribe(topic, callback)
-			let result = transmitter.unsubscribe(callback)
+			const result = transmitter.unsubscribe(callback)
 
 			assert.isTrue(result)
 		})
 
-		it("should remove a callback when unsubscribe a topic", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should remove a callback when unsubscribe a topic', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 			transmitter.unsubscribe(topic)
@@ -299,12 +298,12 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should call a callback for non deleted topic when unsubscribe a topic", function () {
-			let topic1 = getUniqueString(),
-				topic2 = getUniqueString(),
-				callback1 = sinon.spy(),
-				callback2 = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should call a callback for non deleted topic when unsubscribe a topic', () => {
+			const topic1 = getUniqueString()
+			const topic2 = getUniqueString()
+			const callback1 = sinon.spy()
+			const callback2 = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic1, callback1)
 			transmitter.subscribe(topic2, callback2)
@@ -318,12 +317,12 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should remove a callback when unsubscribe a token", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should remove a callback when unsubscribe a token', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
-			let token = transmitter.subscribe(topic, callback)
+			const token = transmitter.subscribe(topic, callback)
 			transmitter.unsubscribe(token)
 			transmitter.publish(topic)
 			clock.tick(1)
@@ -332,13 +331,13 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should call another callback for the same topic when unsubscribe a token assigned to that topic", function () {
-			let topic = getUniqueString(),
-				callback1 = sinon.spy(),
-				callback2 = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should call another callback for the same topic when unsubscribe a token assigned to that topic', () => {
+			const topic = getUniqueString()
+			const callback1 = sinon.spy()
+			const callback2 = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
-			let token = transmitter.subscribe(topic, callback1)
+			const token = transmitter.subscribe(topic, callback1)
 			transmitter.subscribe(topic, callback2)
 			transmitter.unsubscribe(token)
 			transmitter.publish(topic)
@@ -349,10 +348,10 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should remove the callback when unsubscribe this callback", function () {
-			let topic = getUniqueString(),
-				callback = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should remove the callback when unsubscribe this callback', () => {
+			const topic = getUniqueString()
+			const callback = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic, callback)
 			transmitter.unsubscribe(callback)
@@ -363,12 +362,12 @@ describe('Transmitter', () => {
 			clock.restore()
 		})
 
-		it("should remove the callback from all topics when unsubscribe this callback", function () {
-			let topic1 = getUniqueString(),
-				topic2 = getUniqueString(),
-				callback1 = sinon.spy(),
-				callback2 = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should remove the callback from all topics when unsubscribe this callback', () => {
+			const topic1 = getUniqueString()
+			const topic2 = getUniqueString()
+			const callback1 = sinon.spy()
+			const callback2 = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic1, callback1)
 			transmitter.subscribe(topic2, callback1)
@@ -385,15 +384,15 @@ describe('Transmitter', () => {
 	})
 
 	describe('different tricks', () => {
-		it("should not crash when pubishing two topics and callback from one topic unsubscribe second topic", function () {
-			let topic1 = getUniqueString(),
-				topic2 = getUniqueString(),
-				callback1 = function () {
-					transmitter.unsubscribe(topic2)
-				},
-				callback2 = sinon.spy(),
-				callback3 = sinon.spy(),
-				clock = sinon.useFakeTimers()
+		it('should not crash when pubishing two topics and callback from one topic unsubscribe second topic', () => {
+			const topic1 = getUniqueString()
+			const topic2 = getUniqueString()
+			const callback1 = () => {
+				transmitter.unsubscribe(topic2)
+			}
+			const callback2 = sinon.spy()
+			const callback3 = sinon.spy()
+			const clock = sinon.useFakeTimers()
 
 			transmitter.subscribe(topic1, callback1)
 			transmitter.subscribe(topic2, callback2)
