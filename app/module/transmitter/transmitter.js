@@ -20,7 +20,7 @@ class Transmitter {
 			this.callbacksMap.set(topic, new Map())
 		}
 
-		const token = 'transmitter_uid_' + String(++this.lastUid)
+		const token = `transmitter_uid_${String(++this.lastUid)}`
 		this.callbacksMap.get(topic).set(token, callback)
 
 		return token

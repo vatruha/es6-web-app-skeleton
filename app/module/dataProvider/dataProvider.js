@@ -61,7 +61,7 @@ class DataProvider {
 
 			if (isIterable(paramsMap)) {
 				for (const pair of paramsMap) {
-					requestUrl = requestUrl.replace(new RegExp('%' + pair[0] + '%', 'g'), pair[1])
+					requestUrl = requestUrl.replace(new RegExp(`%${pair[0]}%`, 'g'), pair[1])
 				}
 			}
 		}
