@@ -152,7 +152,7 @@ describe('DataProvider', () => {
 		assert.deepEqual(data, {g: 'hhh'})
 	})
 
-	it('should return Response and not throw an error with data when params are not Objects', async () => {
+	it('should return Response with data and not throw an error when params are not Objects', async () => {
 		await dataProvider.loadUrls('/test/module/dataProvider/dataProvider1.data.json')
 		const response = await dataProvider.load('url6', 'some string')
 		assert.typeOf(response, 'Response')
