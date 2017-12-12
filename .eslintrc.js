@@ -16,8 +16,9 @@ module.exports = {
 			"number": true,
 			"string": true
 		}],
+		"no-return-await": 1,
 		"no-unused-vars": 2,
-		"prefer-arrow-callback": 2,
+		"prefer-arrow-callback": 1,
 		"prefer-const": 2,
 		"prefer-template": 2,
 		"quotes": [2, "single"],
